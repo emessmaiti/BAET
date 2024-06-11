@@ -1,0 +1,93 @@
+package de.th.koeln.benutzerdatenservice.entities;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+public class Benutzerdaten {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    @Version
+    private Long version;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+    private String vorname;
+    private String nachname;
+    private String email;
+    @Enumerated(EnumType.STRING)
+    private Geschlecht geschlecht;
+    private String sub;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private LocalDateTime letzteAnmeldung;
+
+    public Benutzerdaten() {
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public String getVorname() {
+        return vorname;
+    }
+
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
+    }
+
+    public String getNachname() {
+        return nachname;
+    }
+
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Geschlecht getGeschlecht() {
+        return geschlecht;
+    }
+
+    public void setGeschlecht(Geschlecht geschlecht) {
+        this.geschlecht = geschlecht;
+    }
+
+    public String getSub() {
+        return sub;
+    }
+
+    public void setSub(String sub) {
+        this.sub = sub;
+    }
+
+    public LocalDateTime getLetzteAnmeldung() {
+        return letzteAnmeldung;
+    }
+
+    public void setLetzteAnmeldung(LocalDateTime letzteAnmeldung) {
+        this.letzteAnmeldung = letzteAnmeldung;
+    }
+
+    @PrePersist
+    @PreUpdate
+    protected void revesioniere() {
+        timestamp = LocalDateTime.now();
+    }
+
+}

@@ -1,0 +1,10 @@
+de\th\koeln\authentifizierungservice\controller\AuthentifizierungController.class
+de\th\koeln\authentifizierungservice\service\BenutzerService.class
+de\th\koeln\authentifizierungservice\entities\PasswortZuruecksetzen.class
+de\th\koeln\authentifizierungservice\repository\PasswortZuruecksetzenRepository.class
+de\th\koeln\authentifizierungservice\AuthentifizierungServiceApplication.class
+de\th\koeln\authentifizierungservice\config\SecurityConfig.class
+de\th\koeln\authentifizierungservice\entities\Benutzer.class
+de\th\koeln\authentifizierungservice\repository\BenutzerRepository.class
+de\th\koeln\authentifizierungservice\util\JwtUtil.class
+de\th\koeln\authentifizierungservice\dto\LoginRequest.class

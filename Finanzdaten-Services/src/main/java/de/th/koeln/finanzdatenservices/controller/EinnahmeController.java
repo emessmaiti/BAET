@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/einnahmen")
+@RequestMapping("/api/einnahmen")
 public class EinnahmeController extends BaseController<Einnahme> {
 
     @Autowired
@@ -28,13 +28,18 @@ public class EinnahmeController extends BaseController<Einnahme> {
     }
 
     @GetMapping("/all/monat/{benutzerId}/{monat}")
-    public Set<Einnahme> getAlleEinnahmenByMonat(@PathVariable String benutzerId, @PathVariable int monat) {
+    public Set<Einnahme> getAlleEinnahmenAktuellesMonats(@PathVariable String benutzerId, @PathVariable int monat) {
         return this.service.holeEinnahmenBeiDatum(benutzerId, monat);
     }
 
-    @GetMapping("/all/monat/{benutzerId}")
-    public Set<Einnahme> getAlleEinnahmenByMonat(@PathVariable String benutzerId) {
+    @GetMapping("/all/{benutzerId}")
+    public Set<Einnahme> getAlleEinnahmenAktuellesMonats(@PathVariable String benutzerId) {
         return this.service.holeEinnahmenAktuellesDatum(benutzerId);
+    }
+
+    @GetMapping("/all/monat/{kontoId}")
+    public Set<Einnahme> getAlleEinnahmenAktuellesMonats(@PathVariable Long kontoId) {
+        return this.service.holeEinnahmenAktuellesDatum(kontoId);
     }
 
     @GetMapping("/getSumme")
@@ -47,9 +52,9 @@ public class EinnahmeController extends BaseController<Einnahme> {
 
         BigDecimal summe = BigDecimal.ZERO;
         if (kontoId != null) {
-            summe = this.service.getSumme(kontoId);
+            summe = this.service.getSummeAlleEinnahmen(kontoId);
         } else if (benutzerId != null) {
-            summe = this.service.getSumme(benutzerId);
+            summe = this.service.getSummeAlleEinnahmen(benutzerId);
         }
         return ResponseEntity.ok(summe);
     }
@@ -58,5 +63,16 @@ public class EinnahmeController extends BaseController<Einnahme> {
     public Einnahme getKategorie(@RequestParam EinnahmeKategorie kategorie) {
         return this.service.findByKategorie(kategorie);
     }
+
+    @GetMapping("/getSumme/benutzer/{benutzerId}")
+    BigDecimal getEinnahmeSumme(@PathVariable String benutzerId){
+        return this.service.getSummeEinnahmenDesMonat(benutzerId);
+    }
+
+    @GetMapping("/getSumme/konto/{kontoId}")
+    BigDecimal getEinnahmeSumme(@PathVariable Long kontoId){
+        return this.service.getSummeEinnahmenDesMonat(kontoId);
+    }
+
 
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface AuthClient {
 
     @GetMapping("/getSub")
-    String getSub(String token);
+    String getSub();
 
     class TokenResponse {
         private String accessToken;

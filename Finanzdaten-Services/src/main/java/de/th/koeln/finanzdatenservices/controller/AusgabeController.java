@@ -2,8 +2,6 @@ package de.th.koeln.finanzdatenservices.controller;
 
 import de.th.koeln.finanzdatenservices.entities.Ausgabe;
 import de.th.koeln.finanzdatenservices.entities.AusgabeKategorie;
-import de.th.koeln.finanzdatenservices.entities.Einnahme;
-import de.th.koeln.finanzdatenservices.entities.EinnahmeKategorie;
 import de.th.koeln.finanzdatenservices.service.AusgabeService;
 import de.th.koeln.finanzdatenservices.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/ausgaben")
+@RequestMapping("/api/ausgaben")
 public class AusgabeController extends BaseController<Ausgabe> {
 
     @Autowired
@@ -34,9 +31,9 @@ public class AusgabeController extends BaseController<Ausgabe> {
 
         BigDecimal summe = BigDecimal.ZERO;
         if (kontoId != null) {
-            summe = this.service.getSumme(kontoId);
+            summe = this.service.getSummeAlleAusgaben(kontoId);
         } else if (benutzerId != null) {
-            summe = this.service.getSumme(benutzerId);
+            summe = this.service.getSummeAlleAusgaben(benutzerId);
         }
         return ResponseEntity.ok(summe);
     }
@@ -46,13 +43,28 @@ public class AusgabeController extends BaseController<Ausgabe> {
         return this.service.holeAllAusgabenByDatumDesc(benutzerID);
     }
 
-    @GetMapping("all/monat/{benutzerId}")
-    public Set<Ausgabe> getAlleAusgabenByMonat(@PathVariable String benutzerId) {
-        return this.service.holeAusgabenBeiDatum(benutzerId, LocalDate.now().getMonthValue());
+    @GetMapping("all/{benutzerId}")
+    public Set<Ausgabe> getAlleAusgabenAktuellesMonats(@PathVariable String benutzerId) {
+        return this.service.holeAusgabenAktuellesDatum(benutzerId);
+    }
+
+    @GetMapping("all/monat/{kontoId}")
+    public Set<Ausgabe> getAlleAusgabenAktuellesMonats(@PathVariable Long kontoId) {
+        return this.service.holeAusgabenAktuellesDatum(kontoId);
     }
 
     @GetMapping("/kategorie")
     public Ausgabe getKategorie(@RequestParam AusgabeKategorie kategorie) {
         return this.service.findByKategorie(kategorie);
+    }
+
+    @GetMapping("/getSumme/benutzer/{benutzerId}")
+    BigDecimal getAusgabenSumme(@PathVariable String benutzerId){
+        return this.service.getSummeAusgabenDesMonat(benutzerId);
+    }
+
+    @GetMapping("/getSumme/konto/{kontoId}")
+    BigDecimal getAusgabenSumme(@PathVariable Long kontoId){
+        return this.service.getSummeAusgabenDesMonat(kontoId);
     }
 }

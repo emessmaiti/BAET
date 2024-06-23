@@ -4,7 +4,9 @@
     <file url="file://$PROJECT_DIR$/Authentifizierung-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Benutzerdaten-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Finanzdaten-Services/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Gateway-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Kontodaten-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Service-Discovery/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Transaktionen-Service/src/main/java" charset="UTF-8" />
   </component>
 </project>

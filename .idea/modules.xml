@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Authentifizierung-Service/Authentifizierung-Service.iml" filepath="$PROJECT_DIR$/Authentifizierung-Service/Authentifizierung-Service.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/BA.iml" filepath="$PROJECT_DIR$/.idea/BA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Finanzdaten-Services/Finanzdaten-Services.iml" filepath="$PROJECT_DIR$/Finanzdaten-Services/Finanzdaten-Services.iml" />
     </modules>
   </component>
 </project>

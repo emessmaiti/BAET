@@ -19,9 +19,9 @@ public abstract class BaseController<T extends AbstraktEntitaet> {
     }
 
     @PostMapping
-    public T create(@RequestBody T entitaet, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        entitaet.setBenutzerID(userId);
+    public T create(@RequestBody T entitaet, @AuthenticationPrincipal Jwt jwt){
+        String benutzerId = jwt.getSubject();
+        entitaet.setBenutzerID(benutzerId);
         return baseService.save(entitaet);
     }
 
@@ -41,11 +41,11 @@ public abstract class BaseController<T extends AbstraktEntitaet> {
         return baseService.findByID(id);
     }
 
-    @GetMapping("/all")
-    public Iterable<T> findAll(@AuthenticationPrincipal Jwt jwt) {
-        String sub = jwt.getSubject();
-        return baseService.findAllByBenutzerId(sub);
-    }
+//    @GetMapping("/all")
+//    public Iterable<T> findAll(@AuthenticationPrincipal Jwt jwt) {
+//        String sub = jwt.getSubject();
+//        return baseService.findAllByBenutzerId(sub);
+//    }
 
     @GetMapping("/all/{sub}")
     public Iterable<T> findAll(@PathVariable String sub) {

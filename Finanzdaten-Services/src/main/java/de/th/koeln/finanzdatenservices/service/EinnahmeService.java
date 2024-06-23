@@ -1,5 +1,6 @@
 package de.th.koeln.finanzdatenservices.service;
 
+import de.th.koeln.finanzdatenservices.client.KontoClient;
 import de.th.koeln.finanzdatenservices.entities.Einnahme;
 import de.th.koeln.finanzdatenservices.entities.EinnahmeKategorie;
 import de.th.koeln.finanzdatenservices.repository.BaseRepository;
@@ -15,11 +16,15 @@ import java.util.Set;
 public class EinnahmeService extends BaseService<Einnahme> {
 
 
-    @Autowired
-    protected EinnahmeRepository repository;
 
-    protected EinnahmeService(BaseRepository<Einnahme> repository) {
+    protected EinnahmeRepository repository;
+    protected KontoClient kontoClient;
+
+    @Autowired
+    protected EinnahmeService(BaseRepository<Einnahme> repository, KontoClient kontoClient) {
         super(repository);
+        this.repository = (EinnahmeRepository) repository;
+        this.kontoClient = kontoClient;
     }
 
     public Set<Einnahme> holeEinnahmenBeiDatum(String benutzerId, int monat) {
@@ -32,6 +37,33 @@ public class EinnahmeService extends BaseService<Einnahme> {
         return this.repository.findEinnahmeByMonth(benutzerId, LocalDate.now().getMonthValue());
     }
 
+    public Set<Einnahme> holeEinnahmenAktuellesDatum(Long kontoId) {
+        this.kontoClient.findById(kontoId);
+        return this.repository.findEinnahmeByMonth(kontoId, LocalDate.now().getMonthValue());
+    }
+
+    public BigDecimal getSummeEinnahmenDesMonat(String benutzerId) {
+        Set<Einnahme> einnahmeSet = holeEinnahmenAktuellesDatum(benutzerId);
+        BigDecimal summeEinnahmen = BigDecimal.ZERO;
+        for (Einnahme einnahme : einnahmeSet) {
+            if(einnahme != null && einnahme.getBetrag() != null){
+                summeEinnahmen  = summeEinnahmen.add(einnahme.getBetrag());
+            }
+        }
+        return summeEinnahmen;
+    }
+
+    public BigDecimal getSummeEinnahmenDesMonat(Long kontoId) {
+        Set<Einnahme> einnahmeSet = holeEinnahmenAktuellesDatum(kontoId);
+        BigDecimal summeEinnahmen = BigDecimal.ZERO;
+        for (Einnahme einnahme : einnahmeSet) {
+            if(einnahme != null && einnahme.getBetrag() != null){
+                summeEinnahmen  = summeEinnahmen.add(einnahme.getBetrag());
+            }
+        }
+        return summeEinnahmen;
+    }
+
     public Set<Einnahme> holleAlleEinnahmeDesc(String id) {
         findByBenutzerId(id);
         return this.repository.findAllOrderByDatumDesc(id);
@@ -41,7 +73,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
        return this.repository.findEinnahmeByEinnahmeKategorie(kategorie);
     }
 
-    public BigDecimal getSumme(String benutzerId) {
+    public BigDecimal getSummeAlleEinnahmen(String benutzerId) {
         Set<Einnahme> einnahmeSet = this.repository.findAllByBenutzerID(benutzerId);
         BigDecimal summe = BigDecimal.ZERO;
         for (Einnahme einnahme : einnahmeSet) {
@@ -51,7 +83,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
         return summe;
     }
 
-    public BigDecimal getSumme(Long kontoId) {
+    public BigDecimal getSummeAlleEinnahmen(Long kontoId) {
         Set<Einnahme> einnahmeSet = this.repository.findAllByKontoId(kontoId);
         BigDecimal summe = BigDecimal.ZERO;
         for (Einnahme einnahme : einnahmeSet) {

@@ -28,4 +28,6 @@ public interface BaseRepository<T extends AbstraktEntitaet> extends JpaRepositor
     boolean existsByBenutzerID(String benutzerID);
 
     Set<T> findAllByKontoId(Long kontoId);
+
+
 }

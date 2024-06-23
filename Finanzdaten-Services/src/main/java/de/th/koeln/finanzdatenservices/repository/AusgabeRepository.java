@@ -2,6 +2,7 @@ package de.th.koeln.finanzdatenservices.repository;
 
 import de.th.koeln.finanzdatenservices.entities.Ausgabe;
 import de.th.koeln.finanzdatenservices.entities.AusgabeKategorie;
+import de.th.koeln.finanzdatenservices.entities.Einnahme;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,6 +18,9 @@ public interface AusgabeRepository extends BaseRepository<Ausgabe> {
 
     @Query("SELECT e FROM Einnahme e WHERE e.benutzerID = :benutzerID AND MONTH(e.datum) = :monat ORDER BY e.datum DESC ")
     Set<Ausgabe> findAusgabenByMonat(@Param("benutzerID") String benutzerID, @Param("monat") int monat);
+
+    @Query("SELECT e FROM Ausgabe e WHERE e.kontoId = :kontoId AND MONTH(e.datum) = :monat ORDER BY e.datum DESC ")
+    Set<Ausgabe> findAusgabenByMonat(@Param("kontoId") Long kontoId, @Param("monat") int monat);
 
     Ausgabe findAusgabeByAusgabeKategorie(AusgabeKategorie kategorie);
 }

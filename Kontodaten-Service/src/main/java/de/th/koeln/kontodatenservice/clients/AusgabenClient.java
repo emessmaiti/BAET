@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.math.BigDecimal;
 import java.util.Set;
 
-@FeignClient(name = "ausgaben-client", url = "http://localhost:8086")
+@FeignClient(name = "ausgaben-client", url = "http://localhost:8086/api")
 public interface AusgabenClient {
 
     @GetMapping("/ausgaben/all/{sub}")
     Iterable<AusgabenDTO> findAll(@PathVariable String sub);
 
-    @GetMapping("/ausgaben/getSumme/{benutzerId}")
+    @GetMapping("/ausgaben/getSumme/benutzer/{benutzerId}")
     BigDecimal getAusgabenSumme(@PathVariable String benutzerId);
 
     @GetMapping("/ausgaben/all/konto/{kontoId}")

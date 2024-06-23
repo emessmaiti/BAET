@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.YearMonth;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class BudgetService extends BaseService<Budget> {
     }
 
 
+
     public BigDecimal getTotalAusgabenByBudget(Long budgetId) {
         Budget budget = this.repository.findById(budgetId).orElseThrow(() -> new NotFoundException("Budget mit der ID " + budgetId + "nicht gefunden"));
         Set<Ausgabe> ausgaben = budget.getAusgaben();
@@ -66,9 +68,19 @@ public class BudgetService extends BaseService<Budget> {
         for (Budget budget : budgets) {
             YearMonth budgetMonat = YearMonth.from(budget.getStartDatum());
             if (budgetMonat.equals(aktuelleMonat)) {
+                budget.setProgress(calculateProgress(budget));
                 budgetsAktuellesMonats.add(budget);
             }
         }
         return budgetsAktuellesMonats;
+    }
+
+    private BigDecimal calculateProgress(Budget budget) {
+        BigDecimal totalAusgaben = getTotalAusgabenByBudget(budget.getId());
+        BigDecimal budgetAmount = budget.getBudget();
+        if (budgetAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
+        }
+        return totalAusgaben.divide(budgetAmount, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
     }
 }

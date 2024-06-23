@@ -1,21 +1,21 @@
-package de.th.koeln.authentifizierungservice.service;
+package de.th.koeln.authentifizierungservice.clients;
 
 import de.th.koeln.authentifizierungservice.dto.BenutzerDaten;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "benutzerdaten-service")
-public interface BenutzerServiceClient {
+public interface BenutzerClient {
 
-    @PostMapping("/benutzer")
+    @PostMapping("/api/benutzer")
     void saveBenutzer(@RequestBody BenutzerDaten benutzer);
 
-    @GetMapping("/benutzer/email/{email}")
+    @GetMapping("/api/benutzer/email/{email}")
     BenutzerDaten getBenutzerIfExist(@PathVariable("email") String email);
 
-    @GetMapping("/benutzer/sub/{sub}")
+    @GetMapping("/api/benutzer/sub/{sub}")
     BenutzerDaten getBenutzerBySub(@PathVariable("sub") String sub);
 
-    @PutMapping("/benutzer/lastLogin/{sub}")
+    @PutMapping("/api/benutzer/lastLogin/{sub}")
     void updateLetzteAnmeldung(@PathVariable String sub);
 }

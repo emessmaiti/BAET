@@ -21,6 +21,8 @@ public class Budget extends AbstraktEntitaet {
     private BigDecimal restBetrag;
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Ausgabe> ausgaben = new HashSet<Ausgabe>();
+    @Transient
+    private BigDecimal progress;
 
     public Budget() {
         super();
@@ -84,5 +86,13 @@ public class Budget extends AbstraktEntitaet {
 
     public void setAusgaben(Set<Ausgabe> ausgabe) {
         this.ausgaben = ausgabe;
+    }
+
+    public BigDecimal getProgress(){
+        return this.progress;
+    }
+
+    public void setProgress(BigDecimal progress){
+        this.progress = progress;
     }
 }

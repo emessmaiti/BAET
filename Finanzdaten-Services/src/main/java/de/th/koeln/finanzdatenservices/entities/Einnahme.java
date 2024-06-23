@@ -19,15 +19,6 @@ public class Einnahme extends AbstraktEntitaet {
         super();
     }
 
-//    public Einnahme(Long version, LocalDateTime erstellerZeitstempel, LocalDateTime bearbeiterZeitstempel,
-//                    String benutzerID, BigDecimal beitrag, EinnahmeKategorie einnahmeKategorie, String bezeichnung, String beschreibung, LocalDate datum) {
-//        super(version, erstellerZeitstempel, bearbeiterZeitstempel, benutzerID, beitrag);
-//        this.einnahmeKategorie = einnahmeKategorie;
-//        this.bezeichnung = bezeichnung;
-//        this.beschreibung = beschreibung;
-//        this.datum = datum;
-//    }
-
     @NonNull
     public EinnahmeKategorie getEinnahmeKategorie() {
         return einnahmeKategorie;

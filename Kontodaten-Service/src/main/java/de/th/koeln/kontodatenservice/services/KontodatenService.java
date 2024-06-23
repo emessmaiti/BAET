@@ -11,6 +11,7 @@ import de.th.koeln.kontodatenservice.exceptions.NotFoundException;
 import de.th.koeln.kontodatenservice.repositories.KontodatenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -70,7 +71,7 @@ public class KontodatenService {
         return this.repository.findKontodatenByBenutzerId(benutzerDTO.getSub());
     }
 
-    public BigDecimal getKontoStandByBenutzerId(String benutzerID) {
+    public BigDecimal getKontoStandByBenutzerId( String benutzerID) {
         BenutzerDTO benutzerDTO = this.benutzerClient.getBenutzerBySub(benutzerID);
 
         if (benutzerDTO == null || benutzerDTO.getSub() == null) {
@@ -106,6 +107,16 @@ public class KontodatenService {
             return kontostand;
 
     }
+
+    private BigDecimal getEinnahmeSumme(String benutzerId, Long kontoId) {
+        if ((benutzerId == null && kontoId == null) || (benutzerId != null && kontoId != null)) {
+            throw new IllegalArgumentException("Either benutzerId or kontoId must be provided, but not both.");
+        }
+        ResponseEntity<BigDecimal> response = this.einnahmeClient.getSumme(benutzerId,kontoId);
+        return response.getBody();
+
+    }
+
 
     public Set<EinnahmeDTO> findAllEinnahmenByKontoId(Long kontoId) {
        return this.einnahmeClient.findAllByKontoId(kontoId);

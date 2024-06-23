@@ -12,6 +12,10 @@ public interface EinnahmeRepository extends BaseRepository<Einnahme> {
     @Query("SELECT e FROM Einnahme e WHERE e.benutzerID = :benutzerID AND MONTH(e.datum) = :monat ORDER BY e.datum DESC ")
     Set<Einnahme> findEinnahmeByMonth(@Param("benutzerID") String benutzerID, @Param("monat") int monat);
 
+    @Query("SELECT e FROM Einnahme e WHERE e.kontoId = :kontoId AND MONTH(e.datum) = :monat ORDER BY e.datum DESC ")
+    Set<Einnahme> findEinnahmeByMonth(@Param("kontoId") Long kontoId, @Param("monat") int monat);
+
+
     @Query("SELECT e FROM Einnahme e WHERE e.benutzerID = :benutzerID ORDER BY e.datum DESC ")
     Set<Einnahme> findAllOrderByDatumDesc(@Param("benutzerID") String benutzerID);
 

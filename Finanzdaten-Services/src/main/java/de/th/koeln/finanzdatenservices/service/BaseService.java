@@ -79,7 +79,6 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
         } else {
             throw new NotFoundException("Konto mit der ID " + kontoId + " nicht gefunden.");
         }
-
     }
 
 }

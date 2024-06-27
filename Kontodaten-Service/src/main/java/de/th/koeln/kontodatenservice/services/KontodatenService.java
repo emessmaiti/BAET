@@ -81,7 +81,7 @@ public class KontodatenService {
         BigDecimal einnahmenSumme = this.einnahmeClient.getEinnahmeSumme(benutzerID);
         BigDecimal ausgabenSumme = this.ausgabenClient.getAusgabenSumme(benutzerID);
 
-        Kontodaten kontodaten = this.repository.findKontodatenByBenutzerId(benutzerDTO.getSub());
+        Kontodaten kontodaten = this.repository.findKontodatenByBenutzerId(benutzerID);
         if (kontodaten == null) {
             throw new NotFoundException("Konto nicht gefunden");
         }

@@ -65,6 +65,7 @@ public class KontoController {
         return ResponseEntity.ok(kontostand);
     }
 
+
     @GetMapping("/kontostand")
     public ResponseEntity<BigDecimal> getKontostand(@RequestParam(name = "benutzerId", required = false) String benutzerId,
                                                     @RequestParam(name = "kontoId", required = false) Long kontoId) {

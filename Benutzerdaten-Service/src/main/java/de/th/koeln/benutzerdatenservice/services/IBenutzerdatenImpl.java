@@ -10,6 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+/**
+ * Implementierung der Benutzerdaten-Services.
+ *
+ * <p>Diese Klasse bietet die Implementierung der im {@link IBenutzerdatenServices} Interface definierten Methoden zur Verwaltung der Benutzerdaten.</p>
+ */
 @Service
 @Transactional
 public class IBenutzerdatenImpl implements IBenutzerdatenServices {

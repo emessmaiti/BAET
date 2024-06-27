@@ -6,6 +6,8 @@ import de.th.koeln.finanzdatenservices.service.AusgabeService;
 import de.th.koeln.finanzdatenservices.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,32 +25,26 @@ public class AusgabeController extends BaseController<Ausgabe> {
     }
 
     @GetMapping("/getSumme")
-    public ResponseEntity<BigDecimal> getSumme(@RequestParam(name = "benutzerId", required = false) String benutzerId,
-                                              @RequestParam(name = "kontoId", required = false) Long kontoId) {
-        if (benutzerId != null && kontoId != null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-
-        BigDecimal summe = BigDecimal.ZERO;
-        if (kontoId != null) {
-            summe = this.service.getSummeAlleAusgaben(kontoId);
-        } else if (benutzerId != null) {
-            summe = this.service.getSummeAlleAusgaben(benutzerId);
-        }
+    public ResponseEntity<BigDecimal> getSumme(@AuthenticationPrincipal Jwt jwt){
+        String benutzerID = jwt.getSubject();
+        BigDecimal summe = this.service.getSummeAlleAusgaben(benutzerID);
         return ResponseEntity.ok(summe);
+
     }
+
 
     @GetMapping("all/monat/{benutzerID}/desc")
     public Set<Ausgabe> getAlleAusgabenByMonatDesc(@PathVariable String benutzerID) {
         return this.service.holeAllAusgabenByDatumDesc(benutzerID);
     }
 
-    @GetMapping("all/{benutzerId}")
-    public Set<Ausgabe> getAlleAusgabenAktuellesMonats(@PathVariable String benutzerId) {
+    @GetMapping("/all")
+    public Set<Ausgabe> getAlleAusgabenAktuellesMonats(@AuthenticationPrincipal Jwt jwt) {
+        String benutzerId = jwt.getSubject();
         return this.service.holeAusgabenAktuellesDatum(benutzerId);
     }
 
-    @GetMapping("all/monat/{kontoId}")
+    @GetMapping("/all/monat/{kontoId}")
     public Set<Ausgabe> getAlleAusgabenAktuellesMonats(@PathVariable Long kontoId) {
         return this.service.holeAusgabenAktuellesDatum(kontoId);
     }

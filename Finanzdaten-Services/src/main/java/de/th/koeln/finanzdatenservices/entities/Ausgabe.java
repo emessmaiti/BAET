@@ -1,5 +1,6 @@
 package de.th.koeln.finanzdatenservices.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
@@ -18,21 +19,13 @@ public class Ausgabe extends AbstraktEntitaet {
     @Temporal(TemporalType.DATE)
     private LocalDate datum;
     @ManyToOne
+    @JoinColumn(name = "budget_id")
+    @JsonBackReference
     private Budget budget;
 
     public Ausgabe() {
         super();
     }
-
-//    public Ausgabe(Long version, LocalDateTime erstellerZeitstempel, LocalDateTime bearbeiterZeitstempel, String benutzerID, BigDecimal beitrag, AusgabeKategorie ausgabeKategorie,
-//                   String bezeichnung, String beschreibung, LocalDate datum, Budget budget) {
-//        super(version, erstellerZeitstempel, bearbeiterZeitstempel, benutzerID, beitrag);
-//        this.ausgabeKategorie = ausgabeKategorie;
-//        this.bezeichnung = bezeichnung;
-//        this.beschreibung = beschreibung;
-//        this.datum = datum;
-//        this.budget = budget;
-//    }
 
     @NonNull
     public AusgabeKategorie getAusgabeKategorie() {
@@ -73,6 +66,14 @@ public class Ausgabe extends AbstraktEntitaet {
 
     public void setBudget(Budget budget) {
         this.budget = budget;
+    }
+
+    @PreRemove
+    private void removeFromBudget() {
+        if (budget != null) {
+            budget.getAusgaben().remove(this);
+            budget.setRestBetrag(budget.getRestBetrag().add(this.getBetrag()));
+        }
     }
 }
 

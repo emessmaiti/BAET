@@ -6,6 +6,8 @@ import de.th.koeln.finanzdatenservices.service.BaseService;
 import de.th.koeln.finanzdatenservices.service.EinnahmeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -32,8 +34,9 @@ public class EinnahmeController extends BaseController<Einnahme> {
         return this.service.holeEinnahmenBeiDatum(benutzerId, monat);
     }
 
-    @GetMapping("/all/{benutzerId}")
-    public Set<Einnahme> getAlleEinnahmenAktuellesMonats(@PathVariable String benutzerId) {
+    @GetMapping("/all")
+    public Set<Einnahme> getAlleEinnahmenAktuellesMonats(@AuthenticationPrincipal Jwt jwt) {
+        String benutzerId = jwt.getSubject();
         return this.service.holeEinnahmenAktuellesDatum(benutzerId);
     }
 
@@ -42,21 +45,30 @@ public class EinnahmeController extends BaseController<Einnahme> {
         return this.service.holeEinnahmenAktuellesDatum(kontoId);
     }
 
+//    @GetMapping("/getSumme")
+//    public ResponseEntity<BigDecimal> getSumme(@RequestParam(name = "benutzerId", required = false) String benutzerId,
+//                                               @RequestParam(name = "kontoId", required = false) Long kontoId) {
+//
+//        if (benutzerId != null && kontoId != null) {
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//
+//        BigDecimal summe = BigDecimal.ZERO;
+//        if (kontoId != null) {
+//            summe = this.service.getSummeAlleEinnahmen(kontoId);
+//        } else if (benutzerId != null) {
+//            summe = this.service.getSummeAlleEinnahmen(benutzerId);
+//        }
+//        return ResponseEntity.ok(summe);
+//    }
+
     @GetMapping("/getSumme")
-    public ResponseEntity<BigDecimal> getSumme(@RequestParam(name = "benutzerId", required = false) String benutzerId,
-                                               @RequestParam(name = "kontoId", required = false) Long kontoId) {
-
-        if (benutzerId != null && kontoId != null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-
+    public ResponseEntity<BigDecimal> getSumme(@AuthenticationPrincipal Jwt jwt){
         BigDecimal summe = BigDecimal.ZERO;
-        if (kontoId != null) {
-            summe = this.service.getSummeAlleEinnahmen(kontoId);
-        } else if (benutzerId != null) {
-            summe = this.service.getSummeAlleEinnahmen(benutzerId);
-        }
+        String benutzerID = jwt.getSubject();
+        summe = this.service.getSummeEinnahmenDesMonat(benutzerID);
         return ResponseEntity.ok(summe);
+
     }
 
     @GetMapping("/kategorie")

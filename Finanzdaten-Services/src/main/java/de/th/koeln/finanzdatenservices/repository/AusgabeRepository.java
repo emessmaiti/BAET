@@ -16,10 +16,10 @@ public interface AusgabeRepository extends BaseRepository<Ausgabe> {
     @Query("SELECT a FROM Ausgabe a WHERE a.benutzerID = :benutzerID ORDER BY a.datum DESC ")
     Set<Ausgabe> findAllOrderByDatumDesc(@Param("benutzerID") String benutzerID);
 
-    @Query("SELECT e FROM Einnahme e WHERE e.benutzerID = :benutzerID AND MONTH(e.datum) = :monat ORDER BY e.datum DESC ")
+    @Query("SELECT a FROM Ausgabe a WHERE a.benutzerID = :benutzerID AND MONTH(a.datum) = :monat ORDER BY a.datum DESC ")
     Set<Ausgabe> findAusgabenByMonat(@Param("benutzerID") String benutzerID, @Param("monat") int monat);
 
-    @Query("SELECT e FROM Ausgabe e WHERE e.kontoId = :kontoId AND MONTH(e.datum) = :monat ORDER BY e.datum DESC ")
+    @Query("SELECT a FROM Ausgabe a WHERE a.kontoId = :kontoId AND MONTH(a.datum) = :monat ORDER BY a.datum DESC ")
     Set<Ausgabe> findAusgabenByMonat(@Param("kontoId") Long kontoId, @Param("monat") int monat);
 
     Ausgabe findAusgabeByAusgabeKategorie(AusgabeKategorie kategorie);

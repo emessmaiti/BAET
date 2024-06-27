@@ -3,9 +3,11 @@ package de.th.koeln.finanzdatenservices.service;
 import de.th.koeln.finanzdatenservices.client.KontoClient;
 import de.th.koeln.finanzdatenservices.entities.Ausgabe;
 import de.th.koeln.finanzdatenservices.entities.AusgabeKategorie;
-import de.th.koeln.finanzdatenservices.entities.Einnahme;
+import de.th.koeln.finanzdatenservices.entities.Budget;
+import de.th.koeln.finanzdatenservices.exceptions.NotFoundException;
 import de.th.koeln.finanzdatenservices.repository.AusgabeRepository;
 import de.th.koeln.finanzdatenservices.repository.BaseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,40 @@ public class AusgabeService extends BaseService<Ausgabe> {
 
     protected AusgabeRepository repository;
     protected KontoClient kontoClient;
+    protected BudgetService budgetService;
 
     @Autowired
-    protected AusgabeService(BaseRepository<Ausgabe> repository, KontoClient kontoClient) {
+    protected AusgabeService(BaseRepository<Ausgabe> repository, KontoClient kontoClient, BudgetService budgetService) {
         super(repository);
         this.repository = (AusgabeRepository) repository;
         this.kontoClient = kontoClient;
+        this.budgetService = budgetService;
+    }
+
+    @Override
+    @Transactional
+    public Ausgabe save(Ausgabe ausgabe) {
+        if (ausgabe.getBudget() == null || ausgabe.getBudget().getId() == null) {
+            throw new IllegalArgumentException("Budget ID cannot be null");
+        }
+        Budget budget = budgetService.findById(ausgabe.getBudget().getId())
+                .orElseThrow(() -> new NotFoundException("Budget not found"));
+
+        ausgabe.setBudget(budget);
+        budget.getAusgaben().add(ausgabe);
+        budgetService.updateRestBetrag(budget);
+        return super.save(ausgabe);
+    }
+
+    @Transactional
+    public void delete(Long ausgabeId) {
+        Ausgabe ausgabe = repository.findById(ausgabeId)
+                .orElseThrow(() -> new NotFoundException("Ausgabe not found"));
+        Budget budget = ausgabe.getBudget();
+        if (budget != null) {
+            budgetService.removeAusgabeFromBudget(ausgabe);
+        }
+        repository.delete(ausgabe);
     }
 
     public Ausgabe holeAusgabenAktuellesDatum(LocalDate von, LocalDate bis, String benutzerId) {
@@ -42,7 +72,6 @@ public class AusgabeService extends BaseService<Ausgabe> {
     }
 
     public Set<Ausgabe> holeAusgabenAktuellesDatum(String benutzerId) {
-        this.repository.findByBenutzerID(benutzerId);
         return this.repository.findAusgabenByMonat(benutzerId, LocalDate.now().getMonthValue());
     }
 

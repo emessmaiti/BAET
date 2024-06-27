@@ -1,9 +1,7 @@
 package de.th.koeln.authentifizierungservice.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,10 +24,24 @@ import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Sicherheitskonfigurationsklasse für den Authentifizierungsservice.
+ * Diese Klasse definiert die Sicherheitskonfigurationen,
+ * einschließlich OAuth2-Login, CORS, und JWT-Decodierung.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * Diese Methode konfiguriert die Sicherheitsfilterkette für HTTP-Anfragen.
+     * Sie deaktiviert CSRF-Schutz, definiert Zugriffsrechte für verschiedene URL-Muster,
+     * konfiguriert OAuth2-Login und -Logout, und richtet einen OAuth2-Resource-Server ein.
+     *
+     * @param http das HttpSecurity-Objekt zur Konfiguration
+     * @return das konfigurierte SecurityFilterChain-Objekt
+     * @throws Exception falls bei der Konfiguration ein Fehler auftritt
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -54,8 +66,11 @@ public class SecurityConfig {
                 .build();
     }
 
-
-
+    /**
+     * Erstellt ein ClientRegistrationRepository, das die OAuth2-Clientregistrierungen verwaltet.
+     *
+     * @return das ClientRegistrationRepository-Objekt.
+     */
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
         return new InMemoryClientRegistrationRepository(
@@ -63,6 +78,11 @@ public class SecurityConfig {
         );
     }
 
+    /**
+     * Erstellt eine Clientregistrierung für Google OAuth2.
+     *
+     * @return das ClientRegistration-Objekt für Google.
+     */
     private ClientRegistration googleClientRegistration() {
         return ClientRegistration.withRegistrationId("google")
                 .clientId("952233804551-f6gecpvftutql0lh72gef4drupvhi6v1.apps.googleusercontent.com")
@@ -80,17 +100,32 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Erstellt einen JwtDecoder, der JWTs unter Verwendung eines JWK-Set-URI decodiert.
+     *
+     * @return der JwtDecoder.
+     */
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withJwkSetUri("https://www.googleapis.com/oauth2/v3/certs").build();
     }
 
+    /**
+     * Erstellt einen OidcUserService, der zur Anpassung des OIDC-Benutzerservices verwendet werden kann.
+     *
+     * @return der OidcUserService.
+     */
     @Bean
     public OidcUserService oidcUserService() {
-        // Customize OidcUserService if needed, for example, to extract additional information
+        // Anpassung des OidcUserService, falls erforderlich, z.B. um zusätzliche Informationen zu extrahieren
         return new OidcUserService();
     }
 
+    /**
+     * Konfiguriert die CORS-Einstellungen.
+     *
+     * @return die CorsConfigurationSource.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

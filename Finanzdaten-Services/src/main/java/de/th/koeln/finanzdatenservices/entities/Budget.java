@@ -1,5 +1,6 @@
 package de.th.koeln.finanzdatenservices.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -17,9 +18,9 @@ public class Budget extends AbstraktEntitaet {
     private LocalDate startDatum;
     @Temporal(TemporalType.DATE)
     private LocalDate endDatum;
-    private BigDecimal budget;
     private BigDecimal restBetrag;
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Ausgabe> ausgaben = new HashSet<Ausgabe>();
     @Transient
     private BigDecimal progress;
@@ -27,18 +28,6 @@ public class Budget extends AbstraktEntitaet {
     public Budget() {
         super();
     }
-
-//    public Budget(Long version, LocalDateTime erstellerZeitstempel, LocalDateTime bearbeiterZeitstempel, String benutzerID, BigDecimal beitrag,
-//                  AusgabeKategorie kategorie, LocalDate startDatum, LocalDate endDatum, BigDecimal budget, BigDecimal restBetrag, Set<Ausgabe> ausgaben) {
-//        super(version, erstellerZeitstempel, bearbeiterZeitstempel, benutzerID, beitrag);
-//        this.kategorie = kategorie;
-//        this.startDatum = startDatum;
-//        this.endDatum = endDatum;
-//        this.budget = budget;
-//        this.restBetrag = restBetrag;
-//        this.ausgaben = ausgaben;
-//    }
-
 
     public AusgabeKategorie getKategorie() {
         return kategorie;
@@ -62,14 +51,6 @@ public class Budget extends AbstraktEntitaet {
 
     public void setEndDatum(LocalDate endDatum) {
         this.endDatum = endDatum;
-    }
-
-    public BigDecimal getBudget() {
-        return budget;
-    }
-
-    public void setBudget(BigDecimal budget) {
-        this.budget = budget;
     }
 
     public BigDecimal getRestBetrag() {

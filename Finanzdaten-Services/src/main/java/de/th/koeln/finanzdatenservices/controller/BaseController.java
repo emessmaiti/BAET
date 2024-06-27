@@ -2,6 +2,7 @@ package de.th.koeln.finanzdatenservices.controller;
 
 import de.th.koeln.finanzdatenservices.entities.AbstraktEntitaet;
 import de.th.koeln.finanzdatenservices.service.BaseService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,15 @@ public abstract class BaseController<T extends AbstraktEntitaet> {
     }
 
     @PostMapping
-    public T create(@RequestBody T entitaet, @AuthenticationPrincipal Jwt jwt){
-        String benutzerId = jwt.getSubject();
-        entitaet.setBenutzerID(benutzerId);
-        return baseService.save(entitaet);
+    public ResponseEntity<T> create(@RequestBody T entitaet, @AuthenticationPrincipal Jwt jwt){
+      try {
+          String benutzerId = jwt.getSubject();
+          entitaet.setBenutzerID(benutzerId);
+          T createdEntity = baseService.save(entitaet);
+          return ResponseEntity.ok(createdEntity);
+      } catch (IllegalArgumentException e) {
+          return ResponseEntity.badRequest().body(null);
+      }
     }
 
     @PutMapping("/{id}")
@@ -38,14 +44,14 @@ public abstract class BaseController<T extends AbstraktEntitaet> {
 
     @GetMapping("/{id}")
     public Optional<T> findById(@PathVariable Long id) {
-        return baseService.findByID(id);
+        return baseService.findById(id);
     }
 
-//    @GetMapping("/all")
-//    public Iterable<T> findAll(@AuthenticationPrincipal Jwt jwt) {
-//        String sub = jwt.getSubject();
-//        return baseService.findAllByBenutzerId(sub);
-//    }
+    @GetMapping("/alle")
+    public Iterable<T> findAll(@AuthenticationPrincipal Jwt jwt) {
+        String sub = jwt.getSubject();
+        return baseService.findAllByBenutzerId(sub);
+    }
 
     @GetMapping("/all/{sub}")
     public Iterable<T> findAll(@PathVariable String sub) {

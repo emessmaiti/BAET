@@ -33,7 +33,6 @@ public class EinnahmeService extends BaseService<Einnahme> {
     }
 
     public Set<Einnahme> holeEinnahmenAktuellesDatum(String benutzerId) {
-        this.repository.findByBenutzerID(benutzerId);
         return this.repository.findEinnahmeByMonth(benutzerId, LocalDate.now().getMonthValue());
     }
 

@@ -7,9 +7,7 @@ import de.th.koeln.finanzdatenservices.exceptions.NotFoundException;
 import de.th.koeln.finanzdatenservices.repository.BaseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -34,7 +32,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
         return repository.save(entity);
     }
 
-    public Optional<T> findByID(Long id) {
+    public Optional<T> findById(Long id) {
         if (!repository.existsById(id)) {
             throw new NotFoundException("Eintrag mit der ID " + id + " wurde nicht gefunden.");
         }

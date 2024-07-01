@@ -2,8 +2,12 @@ package de.th.koeln.kontodatenservice.dtos;
 
 import java.time.LocalDateTime;
 
+/**
+ * Daten-Transfer-Objekt (DTO) für Benutzerdaten.
+ *
+ * <p>Dieses DTO wird verwendet, um Benutzerdaten zwischen verschiedenen Schichten und Diensten zu übertragen.</p>
+ */
 public class BenutzerDTO {
-
 
     private String vorname;
     private String nachname;
@@ -12,7 +16,12 @@ public class BenutzerDTO {
     private String sub;
     private LocalDateTime letzteAnmeldung;
 
+    /**
+     * Standardkonstruktor.
+     */
     public BenutzerDTO() {}
+
+    // Getter und Setter
 
     public String getVorname() {
         return vorname;

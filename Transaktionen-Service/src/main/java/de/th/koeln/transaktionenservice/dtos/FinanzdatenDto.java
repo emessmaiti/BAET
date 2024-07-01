@@ -3,6 +3,11 @@ package de.th.koeln.transaktionenservice.dtos;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Daten-Transfer-Objekt (DTO) für Finanzdaten.
+ *
+ * <p>Dieses DTO wird verwendet, um Finanzdaten zwischen verschiedenen Schichten und Diensten zu übertragen.</p>
+ */
 public class FinanzdatenDto {
 
     private String benutzerID;
@@ -13,8 +18,13 @@ public class FinanzdatenDto {
     private Long budget;
     private BigDecimal betrag;
 
+    /**
+     * Standardkonstruktor.
+     */
     public FinanzdatenDto() {
     }
+
+    // Getter und Setter
 
     public String getBenutzerID() {
         return benutzerID;

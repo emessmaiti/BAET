@@ -30,7 +30,7 @@ public interface BenutzerClient {
      * @param benutzer Ein {@link BenutzerDaten} Objekt, das die zu speichernden Benutzerdaten enthält.
      */
     @PostMapping("/api/benutzer")
-    void saveBenutzer(@RequestBody BenutzerDaten benutzer);
+    void createBenutzer(@RequestBody BenutzerDaten benutzer);
 
     /**
      * Ruft Benutzerdaten anhand der E-Mail-Adresse ab, falls vorhanden.

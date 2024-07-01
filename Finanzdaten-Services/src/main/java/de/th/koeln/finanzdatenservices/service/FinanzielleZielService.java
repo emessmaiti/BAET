@@ -5,9 +5,19 @@ import de.th.koeln.finanzdatenservices.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Der Service für die Verwaltung von finanziellen Zielen.
+ *
+ * <p>Dieser Service erweitert {@link BaseService} und bietet allgemeine Methoden zur Verwaltung von finanziellen Zielen.</p>
+ */
 @Service
 public class FinanzielleZielService extends BaseService<FinanzielleZiel> {
 
+    /**
+     * Konstruktor zur Initialisierung des Repositories.
+     *
+     * @param repository Das Repository zur Verwaltung der finanziellen Ziele.
+     */
     @Autowired
     protected FinanzielleZielService(BaseRepository<FinanzielleZiel> repository) {
         super(repository);

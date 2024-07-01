@@ -5,40 +5,46 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Abstrakte Basisklasse für Entitäten im Finanzdatendienst.
+ * Diese Klasse definiert gemeinsame Eigenschaften und Verhalten für alle Entitäten,
+ * die Finanzdaten darstellen.
+ *
+ * <p>Die Annotation {@link MappedSuperclass} gibt an, dass diese Klasse nicht direkt in der Datenbank
+ * gespeichert wird, sondern die gemeinsamen Felder und Methoden von Unterklassen erben lässt.</p>
+ */
 @MappedSuperclass
 public abstract class AbstraktEntitaet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Version
     private Long version;
-    @Temporal(TemporalType.TIMESTAMP)
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime erstellerZeitstempel;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, updatable = true)
+
+    @Column(nullable = false)
     private LocalDateTime bearbeiterZeitstempel;
+
     @Column(nullable = false)
     private String benutzerID;
+
     @Column(nullable = false)
     private Long kontoId;
+
     @Column(nullable = false)
     private BigDecimal betrag;
 
+    /**
+     * Standardkonstruktor.
+     */
     protected AbstraktEntitaet() {
     }
 
-//    //TODO Optimize the Constructor, dont need the version and erstell-bearbeiter attributes
-//    protected AbstraktEntitaet(Long version, LocalDateTime erstellerZeitstempel, LocalDateTime bearbeiterZeitstempel,
-//                               String benutzerID, BigDecimal betrag
-//    ) {
-//        this.version = version;
-//        this.erstellerZeitstempel = erstellerZeitstempel;
-//        this.bearbeiterZeitstempel = bearbeiterZeitstempel;
-//        this.benutzerID = benutzerID;
-//        this.betrag = betrag;
-//    }
+    // Getter und Setter für alle Felder
 
     public Long getId() {
         return id;
@@ -68,20 +74,32 @@ public abstract class AbstraktEntitaet {
         return this.betrag;
     }
 
-    public void setBetrag(BigDecimal beitrag) {
-        this.betrag = beitrag;
+    public void setBetrag(BigDecimal betrag) {
+        this.betrag = betrag;
     }
 
+    public LocalDateTime getErstellerZeitstempel() {
+        return erstellerZeitstempel;
+    }
+
+    public LocalDateTime getBearbeiterZeitstempel() {
+        return bearbeiterZeitstempel;
+    }
+
+    /**
+     * Methode, die vor dem Einfügen der Entität aufgerufen wird, um den Ersteller- und Bearbeiterzeitstempel zu setzen.
+     */
     @PrePersist
     public void revesioniere() {
         this.erstellerZeitstempel = LocalDateTime.now();
         this.bearbeiterZeitstempel = LocalDateTime.now();
     }
 
+    /**
+     * Methode, die vor der Aktualisierung der Entität aufgerufen wird, um den Bearbeiterzeitstempel zu aktualisieren.
+     */
     @PreUpdate
     public void setBearbeiterZeitstempel() {
         this.bearbeiterZeitstempel = LocalDateTime.now();
     }
-
-
 }

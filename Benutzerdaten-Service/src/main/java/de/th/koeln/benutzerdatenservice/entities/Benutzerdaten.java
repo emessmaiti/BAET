@@ -110,8 +110,17 @@ public class Benutzerdaten {
      * um den Zeitstempel zu aktualisieren.
      */
     @PrePersist
-    @PreUpdate
     protected void revesioniere() {
+        timestamp = LocalDateTime.now();
+        letzteAnmeldung = LocalDateTime.now();
+    }
+
+    /**
+     * Methode, die vor dem Aktualisieren der Entität aufgerufen wird,
+     * um den Zeitstempel zu aktualisieren.
+     */
+    @PreUpdate
+    protected void revesioniereUpdate() {
         timestamp = LocalDateTime.now();
     }
 }

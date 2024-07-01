@@ -5,9 +5,13 @@ import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Daten-Transfer-Objekt (DTO) für Ausgaben.
+ *
+ * <p>Dieses DTO wird verwendet, um Ausgabeninformationen zwischen verschiedenen Schichten und Diensten zu übertragen.</p>
+ */
 @Embeddable
 public class AusgabenDTO {
-
 
     private String benutzerID;
     private String ausgabeKategorie;
@@ -17,7 +21,12 @@ public class AusgabenDTO {
     private Long budget;
     private BigDecimal betrag;
 
+    /**
+     * Standardkonstruktor.
+     */
     public AusgabenDTO() {}
+
+    // Getter und Setter
 
     public String getBenutzerID() {
         return benutzerID;

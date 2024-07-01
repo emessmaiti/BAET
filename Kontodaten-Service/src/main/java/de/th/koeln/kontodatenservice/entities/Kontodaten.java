@@ -5,24 +5,40 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Entität für Kontodaten.
+ *
+ * <p>Diese Klasse repräsentiert die Kontodaten eines Benutzers und enthält Informationen wie den Kontostand,
+ * die Benutzer-ID und Zeitstempel für die Erstellung und Bearbeitung.</p>
+ */
 @Entity
 public class Kontodaten {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String benutzerId;
+
     @Version
     private Long version;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
     private LocalDateTime erstellerZeitstempel;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = true)
     private LocalDateTime bearbeiterZeitstempel;
+
     private BigDecimal kontostand = BigDecimal.ZERO;
 
-
+    /**
+     * Standardkonstruktor.
+     */
     public Kontodaten() {}
+
+    // Getter und Setter
 
     public void setId(Long id) {
         this.id = id;
@@ -48,15 +64,20 @@ public class Kontodaten {
         this.benutzerId = benutzerId;
     }
 
+    /**
+     * Setzt die Ersteller- und Bearbeiter-Zeitstempel vor dem Einfügen.
+     */
     @PrePersist
     public void revesioniere() {
         this.erstellerZeitstempel = LocalDateTime.now();
         this.bearbeiterZeitstempel = LocalDateTime.now();
     }
 
+    /**
+     * Aktualisiert den Bearbeiter-Zeitstempel vor dem Update.
+     */
     @PreUpdate
     public void setBearbeiterZeitstempel() {
         this.bearbeiterZeitstempel = LocalDateTime.now();
     }
-
 }

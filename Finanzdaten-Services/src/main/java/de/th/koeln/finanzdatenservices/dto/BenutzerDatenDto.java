@@ -1,5 +1,8 @@
 package de.th.koeln.finanzdatenservices.dto;
 
+/**
+ * DTO für Benutzerdaten.
+ */
 public class BenutzerDatenDto {
 
     private Long id;
@@ -9,9 +12,22 @@ public class BenutzerDatenDto {
     private String geschlecht;
     private String sub;
 
+    /**
+     * Standardkonstruktor.
+     */
     public BenutzerDatenDto() {
     }
 
+    /**
+     * Konstruktor zur Initialisierung aller Felder.
+     *
+     * @param id        Die ID des Benutzers.
+     * @param email     Die E-Mail-Adresse des Benutzers.
+     * @param vorname   Der Vorname des Benutzers.
+     * @param nachname  Der Nachname des Benutzers.
+     * @param geschlecht Das Geschlecht des Benutzers.
+     * @param sub       Die Subjekt-ID des Benutzers.
+     */
     public BenutzerDatenDto(Long id, String email, String vorname, String nachname, String geschlecht, String sub) {
         this.id = id;
         this.email = email;
@@ -20,6 +36,8 @@ public class BenutzerDatenDto {
         this.geschlecht = geschlecht;
         this.sub = sub;
     }
+
+    // Getter und Setter
 
     public Long getId() {
         return id;

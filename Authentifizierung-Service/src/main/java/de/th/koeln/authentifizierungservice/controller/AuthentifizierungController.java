@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin("*")
 public class AuthentifizierungController {
 
     @Autowired
@@ -86,7 +88,7 @@ public class AuthentifizierungController {
             }
         } else {
             BenutzerDaten benutzerDaten = new BenutzerDaten(vorname, nachname, email, geschlecht, sub, letzteAnmeldung);
-            benutzerClient.saveBenutzer(benutzerDaten);
+            benutzerClient.createBenutzer(benutzerDaten);
             KontoDaten kontoDaten = new KontoDaten(sub, BigDecimal.ZERO);
             this.kontoClient.save(kontoDaten);
         }

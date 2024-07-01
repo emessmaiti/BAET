@@ -1,31 +1,38 @@
 package de.th.koeln.finanzdatenservices.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+/**
+ * Die Klasse FinanzielleZiel repräsentiert ein finanzielles Ziel, das in der Anwendung verwaltet wird.
+ * Sie erbt von der abstrakten Klasse {@link AbstraktEntitaet}, die gemeinsame Eigenschaften und Verhalten definiert.
+ *
+ * <p>Diese Klasse enthält spezifische Eigenschaften eines finanziellen Ziels wie Bezeichnung, Fälligkeitsdatum und Sparbetrag.</p>
+ */
 @Entity
 public class FinanzielleZiel extends AbstraktEntitaet {
 
     private String bezeichnung;
-    @Temporal(TemporalType.DATE)
+
+    @Column(nullable = false)
     private LocalDate faelligkeitdatum;
+
+    @Column(nullable = false)
     private BigDecimal sparbetrag;
 
+    /**
+     * Standardkonstruktor.
+     */
     public FinanzielleZiel() {
         super();
     }
 
-//    public FinanzielleZiel(Long version, LocalDateTime erstellerZeitstempel, LocalDateTime bearbeiterZeitstempel, String benutzerID, BigDecimal beitrag, String bezeichnung, LocalDate faelligkeitdatum, BigDecimal sparbetrag) {
-//        super(version, erstellerZeitstempel, bearbeiterZeitstempel, benutzerID, beitrag);
-//        this.bezeichnung = bezeichnung;
-//        this.faelligkeitdatum = faelligkeitdatum;
-//        this.sparbetrag = sparbetrag;
-//    }
+    // Getter und Setter für alle Felder
 
     public String getBezeichnung() {
         return bezeichnung;

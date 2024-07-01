@@ -1,17 +1,22 @@
 package de.th.koeln.finanzdatenservices.dto;
 
-
-import jakarta.persistence.Embeddable;
-
 import java.math.BigDecimal;
 
+/**
+ * DTO für Kontodaten.
+ */
 public class KontoDTO {
 
     private String benutzerId;
     private BigDecimal kontostand = BigDecimal.ZERO;
 
+    /**
+     * Standardkonstruktor.
+     */
     public KontoDTO() {
     }
+
+    // Getter und Setter
 
     public String getBenutzerId() {
         return benutzerId;

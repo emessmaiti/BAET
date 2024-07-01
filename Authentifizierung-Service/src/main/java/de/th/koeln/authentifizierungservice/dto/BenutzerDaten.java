@@ -19,6 +19,8 @@ public class BenutzerDaten {
     private String nachname;
     private String geschlecht;
     private String sub;
+    private LocalDateTime letzteAnmeldung;
+
 
     /**
      * Standardkonstruktor.
@@ -42,6 +44,7 @@ public class BenutzerDaten {
         this.email = email;
         this.geschlecht = geschlecht;
         this.sub = sub;
+        this.letzteAnmeldung = letzteAnmeldung;
     }
 
     // Getter und Setter

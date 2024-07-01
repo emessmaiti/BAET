@@ -1,6 +1,5 @@
 package de.th.koeln.finanzdatenservices.service;
 
-
 import de.th.koeln.finanzdatenservices.entities.Ausgabe;
 import de.th.koeln.finanzdatenservices.entities.Budget;
 import de.th.koeln.finanzdatenservices.exceptions.NotFoundException;
@@ -14,21 +13,35 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.YearMonth;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+/**
+ * Der Service für die Verwaltung von Budgets.
+ *
+ * <p>Dieser Service erweitert {@link BaseService} und bietet zusätzliche Methoden zur spezifischen Verwaltung von Budgets.</p>
+ */
 @Service
 public class BudgetService extends BaseService<Budget> {
 
-
     protected BudgetRepository repository;
 
+    /**
+     * Konstruktor zur Initialisierung des Repositories.
+     *
+     * @param repository Das Repository zur Verwaltung der Budgets.
+     */
     @Autowired
     protected BudgetService(BaseRepository<Budget> repository) {
         super(repository);
         this.repository = (BudgetRepository) repository;
     }
 
+    /**
+     * Speichert ein Budget und setzt den Restbetrag und den Fortschritt.
+     *
+     * @param budget Das zu speichernde Budget.
+     * @return Das gespeicherte Budget.
+     */
     @Override
     @Transactional
     public Budget save(Budget budget) {
@@ -41,6 +54,12 @@ public class BudgetService extends BaseService<Budget> {
         return super.save(budget);
     }
 
+    /**
+     * Fügt eine Ausgabe einem Budget hinzu und aktualisiert den Restbetrag und den Fortschritt.
+     *
+     * @param ausgabe Die hinzuzufügende Ausgabe.
+     * @return Das aktualisierte Budget.
+     */
     @Transactional
     public Budget addAusgabeToBudget(Ausgabe ausgabe) {
         Budget budget = repository.findById(ausgabe.getBudget().getId())
@@ -52,6 +71,12 @@ public class BudgetService extends BaseService<Budget> {
         return repository.save(budget);
     }
 
+    /**
+     * Entfernt eine Ausgabe aus einem Budget und aktualisiert den Restbetrag und den Fortschritt.
+     *
+     * @param ausgabe Die zu entfernende Ausgabe.
+     * @return Das aktualisierte Budget.
+     */
     @Transactional
     public Budget removeAusgabeFromBudget(Ausgabe ausgabe) {
         Budget budget = repository.findById(ausgabe.getBudget().getId())
@@ -63,6 +88,11 @@ public class BudgetService extends BaseService<Budget> {
         return repository.save(budget);
     }
 
+    /**
+     * Aktualisiert den Restbetrag eines Budgets basierend auf den Ausgaben.
+     *
+     * @param budget Das zu aktualisierende Budget.
+     */
     public void updateRestBetrag(Budget budget) {
         BigDecimal totalAusgaben = budget.getAusgaben().stream()
                 .map(Ausgabe::getBetrag)
@@ -71,6 +101,12 @@ public class BudgetService extends BaseService<Budget> {
         budget.setProgress(calculateProgress(budget));
     }
 
+    /**
+     * Berechnet den Fortschritt eines Budgets basierend auf den Ausgaben.
+     *
+     * @param budget Das Budget, für das der Fortschritt berechnet werden soll.
+     * @return Der berechnete Fortschritt in Prozent.
+     */
     private BigDecimal calculateProgress(Budget budget) {
         BigDecimal spentAmount = budget.getBetrag().subtract(budget.getRestBetrag());
         if (budget.getBetrag().compareTo(BigDecimal.ZERO) == 0) {
@@ -79,6 +115,12 @@ public class BudgetService extends BaseService<Budget> {
         return spentAmount.divide(budget.getBetrag(), 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
     }
 
+    /**
+     * Holt die Budgets eines Benutzers für den aktuellen Monat.
+     *
+     * @param benutzerId Die ID des Benutzers.
+     * @return Eine Menge von Budgets des Benutzers für den aktuellen Monat.
+     */
     public Set<Budget> getBudgetsAktuellesMonats(String benutzerId) {
         Set<Budget> budgets = this.repository.findBudgetsByBenutzerID(benutzerId);
         Set<Budget> budgetsAktuellesMonats = new HashSet<>();

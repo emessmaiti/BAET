@@ -6,26 +6,39 @@ import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-
+/**
+ * Die Klasse Ausgabe repräsentiert eine finanzielle Ausgabe, die in der Anwendung verwaltet wird.
+ * Sie erbt von der abstrakten Klasse {@link AbstraktEntitaet}, die gemeinsame Eigenschaften und Verhalten definiert.
+ *
+ * <p>Diese Klasse enthält spezifische Eigenschaften einer Ausgabe wie Kategorie, Bezeichnung, Beschreibung und Datum.
+ * Zusätzlich wird eine Beziehung zu einem Budget definiert, dem die Ausgabe zugeordnet ist.</p>
+ */
 @Entity
 public class Ausgabe extends AbstraktEntitaet {
 
     @Enumerated(EnumType.STRING)
     private AusgabeKategorie ausgabeKategorie;
+
     private String bezeichnung;
     private String beschreibung;
-    @Temporal(TemporalType.DATE)
+
+    @Column(nullable = false)
     private LocalDate datum;
+
     @ManyToOne
     @JoinColumn(name = "budget_id")
     @JsonBackReference
     private Budget budget;
 
+    /**
+     * Standardkonstruktor.
+     */
     public Ausgabe() {
         super();
     }
+
+    // Getter und Setter für alle Felder
 
     @NonNull
     public AusgabeKategorie getAusgabeKategorie() {
@@ -68,6 +81,9 @@ public class Ausgabe extends AbstraktEntitaet {
         this.budget = budget;
     }
 
+    /**
+     * Methode, die vor dem Entfernen der Entität aufgerufen wird, um die Ausgabe aus dem Budget zu entfernen und den Restbetrag zu aktualisieren.
+     */
     @PreRemove
     private void removeFromBudget() {
         if (budget != null) {
@@ -76,4 +92,3 @@ public class Ausgabe extends AbstraktEntitaet {
         }
     }
 }
-

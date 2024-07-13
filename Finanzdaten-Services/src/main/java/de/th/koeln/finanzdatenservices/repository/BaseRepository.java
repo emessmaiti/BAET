@@ -79,4 +79,12 @@ public interface BaseRepository<T extends AbstraktEntitaet> extends JpaRepositor
      * @return Eine Menge von Entitäten des Kontos.
      */
     Set<T> findAllByKontoId(Long kontoId);
+
+    /**
+     * Findet Entity eines bestimmten Kontos anhand der Konto-ID.
+     *
+     * @param kontoId Die ID des Kontos.
+     * @return Eine Menge von Entitäten des Kontos.
+     */
+    T findByKontoId(Long kontoId);
 }

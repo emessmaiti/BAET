@@ -43,7 +43,7 @@ public class TransaktionenService {
         Set<FinanzdatenDto> ausgaben = this.client.getAlleAusgabenAktuellesMonats(kontoId);
 
         return Stream.concat(einnahmen.stream(), ausgaben.stream())
-                .sorted(Comparator.comparing(FinanzdatenDto::getDatum))
+                .sorted(Comparator.comparing(FinanzdatenDto::getDatum).reversed())
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

@@ -132,4 +132,12 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
             throw new NotFoundException("Konto mit der ID " + kontoId + " nicht gefunden.");
         }
     }
+
+    public T findByKontoId( Long kontoId){
+        Optional<T> entity = this.repository.findById(kontoId);
+        if (entity.isPresent()) {
+            return entity.get();
+        }
+        throw new NotFoundException("Konto mit der ID " + kontoId + " nicht gefunden.");
+    }
 }

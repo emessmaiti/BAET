@@ -11,6 +11,14 @@ import java.time.LocalDate;
  * <p>Diese Klasse enthält spezifische Eigenschaften einer Einnahme wie Kategorie, Bezeichnung, Beschreibung und Datum.</p>
  */
 @Entity
+@Table(name = "einnahme", indexes = {
+        @Index(name = "idx_einnahmeKategorie", columnList = "einnahmeKategorie"),
+        @Index(name = "idx_bezeichnung", columnList = "bezeichnung"),
+        @Index(name = "idx_datum", columnList = "datum"),
+        @Index(name = "idx_benutzerID", columnList = "benutzerID"),
+        @Index(name = "idx_kontoId", columnList = "kontoId"),
+        @Index(name = "idx_betrag", columnList = "betrag")
+})
 public class Einnahme extends AbstraktEntitaet {
 
     @Enumerated(EnumType.STRING)

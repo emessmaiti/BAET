@@ -15,6 +15,15 @@ import java.time.LocalDate;
  * Zusätzlich wird eine Beziehung zu einem Budget definiert, dem die Ausgabe zugeordnet ist.</p>
  */
 @Entity
+@Table(name = "ausgabe", indexes = {
+        @Index(name = "idx_ausgabeKategorie", columnList = "ausgabeKategorie"),
+        @Index(name = "idx_bezeichnung", columnList = "bezeichnung"),
+        @Index(name = "idx_datum", columnList = "datum"),
+        @Index(name = "idx_budget_id", columnList = "budget_id"),
+        @Index(name = "idx_benutzerID", columnList = "benutzerID"),
+        @Index(name = "idx_kontoId", columnList = "kontoId"),
+        @Index(name = "idx_betrag", columnList = "betrag")
+})
 public class Ausgabe extends AbstraktEntitaet {
 
     @Enumerated(EnumType.STRING)

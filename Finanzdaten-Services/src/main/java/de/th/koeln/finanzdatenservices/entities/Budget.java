@@ -16,6 +16,15 @@ import java.util.Set;
  * Zusätzlich wird eine Beziehung zu mehreren Ausgaben definiert, die diesem Budget zugeordnet sind.</p>
  */
 @Entity
+@Table(name = "budget", indexes = {
+        @Index(name = "idx_kategorie", columnList = "kategorie"),
+        @Index(name = "idx_startDatum", columnList = "startDatum"),
+        @Index(name = "idx_endDatum", columnList = "endDatum"),
+        @Index(name = "idx_restBetrag", columnList = "restBetrag"),
+        @Index(name = "idx_benutzerID", columnList = "benutzerID"),
+        @Index(name = "idx_kontoId", columnList = "kontoId"),
+        @Index(name = "idx_betrag", columnList = "betrag")
+})
 public class Budget extends AbstraktEntitaet {
 
     @Enumerated(EnumType.STRING)

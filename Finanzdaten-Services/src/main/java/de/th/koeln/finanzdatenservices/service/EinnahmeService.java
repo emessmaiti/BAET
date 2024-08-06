@@ -7,6 +7,7 @@ import de.th.koeln.finanzdatenservices.repository.BaseRepository;
 import de.th.koeln.finanzdatenservices.repository.EinnahmeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param monat Der Monat, für den die Einnahmen abgerufen werden sollen.
      * @return Eine Menge von Einnahmen des Benutzers für den angegebenen Monat.
      */
+    @Transactional
     public Set<Einnahme> holeEinnahmenBeiDatum(String benutzerId, int monat) {
         this.repository.findByBenutzerID(benutzerId);
         return this.repository.findEinnahmeByMonth(benutzerId, monat);
@@ -53,6 +55,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param benutzerId Die ID des Benutzers.
      * @return Eine Menge von Einnahmen des Benutzers für den aktuellen Monat.
      */
+    @Transactional
     public Set<Einnahme> holeEinnahmenAktuellesDatum(String benutzerId) {
         return this.repository.findEinnahmeByMonth(benutzerId, LocalDate.now().getMonthValue());
     }
@@ -63,6 +66,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param kontoId Die ID des Kontos.
      * @return Eine Menge von Einnahmen des Kontos für den aktuellen Monat.
      */
+    @Transactional
     public Set<Einnahme> holeEinnahmenAktuellesDatum(Long kontoId) {
         this.kontoClient.findById(kontoId);
         return this.repository.findEinnahmeByMonth(kontoId, LocalDate.now().getMonthValue());
@@ -74,6 +78,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param benutzerId Die ID des Benutzers.
      * @return Die Summe der Einnahmen des Benutzers für den aktuellen Monat.
      */
+    @Transactional
     public BigDecimal getSummeEinnahmenDesMonat(String benutzerId) {
         Set<Einnahme> einnahmeSet = holeEinnahmenAktuellesDatum(benutzerId);
         BigDecimal summeEinnahmen = BigDecimal.ZERO;
@@ -91,6 +96,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param kontoId Die ID des Kontos.
      * @return Die Summe der Einnahmen des Kontos für den aktuellen Monat.
      */
+    @Transactional
     public BigDecimal getSummeEinnahmenDesMonat(Long kontoId) {
         Set<Einnahme> einnahmeSet = holeEinnahmenAktuellesDatum(kontoId);
         BigDecimal summeEinnahmen = BigDecimal.ZERO;
@@ -108,6 +114,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param id Die ID des Benutzers.
      * @return Eine Menge von Einnahmen des Benutzers, sortiert nach Datum absteigend.
      */
+    @Transactional
     public Set<Einnahme> holleAlleEinnahmeDesc(String id) {
         findByBenutzerId(id);
         return this.repository.findAllOrderByDatumDesc(id);
@@ -119,6 +126,7 @@ public class EinnahmeService extends BaseService<Einnahme> {
      * @param kategorie Die Einnahmekategorie.
      * @return Die Einnahme der angegebenen Kategorie.
      */
+    @Transactional
     public Einnahme findByKategorie(EinnahmeKategorie kategorie) {
         return this.repository.findEinnahmeByEinnahmeKategorie(kategorie);
     }

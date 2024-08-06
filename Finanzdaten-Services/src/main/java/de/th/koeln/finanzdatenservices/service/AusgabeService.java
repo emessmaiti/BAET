@@ -7,7 +7,7 @@ import de.th.koeln.finanzdatenservices.entities.Budget;
 import de.th.koeln.finanzdatenservices.exceptions.NotFoundException;
 import de.th.koeln.finanzdatenservices.repository.AusgabeRepository;
 import de.th.koeln.finanzdatenservices.repository.BaseRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +87,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param benutzerId Die ID des Benutzers.
      * @return Die gefundene Ausgabe.
      */
+    @Transactional
     public Ausgabe holeAusgabenAktuellesDatum(LocalDate von, LocalDate bis, String benutzerId) {
         this.repository.findByBenutzerID(benutzerId);
         return this.repository.findAusgabeByDatumBetweenAndBenutzerID(von, bis, benutzerId);
@@ -98,6 +99,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param kategorie Die Ausgabenkategorie.
      * @return Die Ausgabe der angegebenen Kategorie.
      */
+    @Transactional
     public Ausgabe findByKategorie(AusgabeKategorie kategorie){
         return this.repository.findAusgabeByAusgabeKategorie(kategorie);
     }
@@ -108,6 +110,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param benutzerId Die ID des Benutzers.
      * @return Eine Menge von Ausgaben des Benutzers für den aktuellen Monat.
      */
+    @Transactional
     public Set<Ausgabe> holeAusgabenAktuellesDatum(String benutzerId) {
         return this.repository.findAusgabenByMonat(benutzerId, LocalDate.now().getMonthValue());
     }
@@ -118,6 +121,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param kontoId Die ID des Kontos.
      * @return Die Summe der Ausgaben des Kontos für den aktuellen Monat.
      */
+    @Transactional
     public BigDecimal getSummeAusgabenDesMonat(Long kontoId) {
         Set<Ausgabe> ausgabeSet = holeAusgabenAktuellesDatum(kontoId);
         BigDecimal summeAusgaben = BigDecimal.ZERO;
@@ -135,6 +139,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param benutzerId Die ID des Benutzers.
      * @return Die Summe der Ausgaben des Benutzers für den aktuellen Monat.
      */
+    @Transactional
     public BigDecimal getSummeAusgabenDesMonat(String benutzerId) {
         Set<Ausgabe> ausgabeSet = holeAusgabenAktuellesDatum(benutzerId);
         BigDecimal summeAusgaben = BigDecimal.ZERO;
@@ -152,6 +157,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param kontoId Die ID des Kontos.
      * @return Eine Menge von Ausgaben des Kontos für den aktuellen Monat.
      */
+    @Transactional
     public Set<Ausgabe> holeAusgabenAktuellesDatum(Long kontoId) {
         this.kontoClient.findById(kontoId);
         return this.repository.findAusgabenByMonat(kontoId, LocalDate.now().getMonthValue());
@@ -163,6 +169,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param benutzerId Die ID des Benutzers.
      * @return Eine Menge von Ausgaben des Benutzers sortiert nach Datum absteigend.
      */
+    @Transactional
     public Set<Ausgabe> holeAllAusgabenByDatumDesc(String benutzerId) {
         this.repository.findByBenutzerID(benutzerId);
         return this.repository.findAllOrderByDatumDesc(benutzerId);
@@ -174,6 +181,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param benutzerId Die ID des Benutzers.
      * @return Die Gesamtsumme der Ausgaben des Benutzers.
      */
+    @Transactional
     public BigDecimal getSummeAlleAusgaben(String benutzerId) {
         Set<Ausgabe> ausgabeSet = this.repository.findAllByBenutzerID(benutzerId);
         BigDecimal summe = BigDecimal.ZERO;
@@ -189,6 +197,7 @@ public class AusgabeService extends BaseService<Ausgabe> {
      * @param kontoId Die ID des Kontos.
      * @return Die Gesamtsumme der Ausgaben des Kontos.
      */
+    @Transactional
     public BigDecimal getSummeAlleAusgaben(Long kontoId) {
         Set<Ausgabe> ausgabeSet = this.repository.findAllByKontoId(kontoId);
         BigDecimal summe = BigDecimal.ZERO;

@@ -39,14 +39,14 @@ public abstract class BaseController<T extends AbstraktEntitaet> {
      * @return Die erstellte Entität als ResponseEntity.
      */
     @PostMapping
-    public ResponseEntity<T> create(@RequestBody T entitaet, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<?> create(@RequestBody T entitaet, @AuthenticationPrincipal Jwt jwt) {
         try {
             String benutzerId = jwt.getSubject();
             entitaet.setBenutzerID(benutzerId);
             T createdEntity = baseService.save(entitaet);
             return ResponseEntity.ok(createdEntity);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request " + e.getMessage());
         }
     }
 

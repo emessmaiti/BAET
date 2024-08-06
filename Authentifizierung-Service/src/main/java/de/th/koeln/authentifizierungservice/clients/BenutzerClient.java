@@ -27,7 +27,8 @@ public interface BenutzerClient {
      * <p>Diese Methode sendet eine POST-Anfrage an den Endpunkt "/api/benutzer",
      * um die bereitgestellten Benutzerdaten zu speichern.</p>
      *
-     * @param benutzer Ein {@link BenutzerDaten} Objekt, das die zu speichernden Benutzerdaten enthält.
+     * @param benutzer Ein {@link BenutzerDaten} Objekt, das die zu speichernden
+     * Benutzerdaten enthält.
      */
     @PostMapping("/api/benutzer")
     void createBenutzer(@RequestBody BenutzerDaten benutzer);

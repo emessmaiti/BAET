@@ -93,6 +93,7 @@ public class BudgetService extends BaseService<Budget> {
      *
      * @param budget Das zu aktualisierende Budget.
      */
+    @Transactional
     public void updateRestBetrag(Budget budget) {
         BigDecimal totalAusgaben = budget.getAusgaben().stream()
                 .map(Ausgabe::getBetrag)
@@ -107,6 +108,7 @@ public class BudgetService extends BaseService<Budget> {
      * @param budget Das Budget, für das der Fortschritt berechnet werden soll.
      * @return Der berechnete Fortschritt in Prozent.
      */
+
     private BigDecimal calculateProgress(Budget budget) {
         BigDecimal spentAmount = budget.getBetrag().subtract(budget.getRestBetrag());
         if (budget.getBetrag().compareTo(BigDecimal.ZERO) == 0) {
@@ -121,6 +123,7 @@ public class BudgetService extends BaseService<Budget> {
      * @param benutzerId Die ID des Benutzers.
      * @return Eine Menge von Budgets des Benutzers für den aktuellen Monat.
      */
+    @Transactional
     public Set<Budget> getBudgetsAktuellesMonats(String benutzerId) {
         Set<Budget> budgets = this.repository.findBudgetsByBenutzerID(benutzerId);
         Set<Budget> budgetsAktuellesMonats = new HashSet<>();

@@ -1,9 +1,6 @@
 package de.th.koeln.finanzdatenservices.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,6 +12,14 @@ import java.time.LocalDate;
  * <p>Diese Klasse enthält spezifische Eigenschaften eines finanziellen Ziels wie Bezeichnung, Fälligkeitsdatum und Sparbetrag.</p>
  */
 @Entity
+@Table(name = "finanzielle_ziel", indexes = {
+        @Index(name = "idx_bezeichnung", columnList = "bezeichnung"),
+        @Index(name = "idx_faelligkeitdatum", columnList = "faelligkeitdatum"),
+        @Index(name = "idx_sparbetrag", columnList = "sparbetrag"),
+        @Index(name = "idx_benutzerID", columnList = "benutzerID"),
+        @Index(name = "idx_kontoId", columnList = "kontoId"),
+        @Index(name = "idx_betrag", columnList = "betrag")
+})
 public class FinanzielleZiel extends AbstraktEntitaet {
 
     private String bezeichnung;

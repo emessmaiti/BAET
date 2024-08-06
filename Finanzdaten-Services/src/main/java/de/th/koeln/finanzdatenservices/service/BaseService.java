@@ -53,6 +53,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      * @param id Die ID der zu findenden Entität.
      * @return Eine optionale Entität.
      */
+    @Transactional
     public Optional<T> findById(Long id) {
         if (!repository.existsById(id)) {
             throw new NotFoundException("Eintrag mit der ID " + id + " wurde nicht gefunden.");
@@ -66,6 +67,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      * @param benutzer Die Benutzer-ID.
      * @return Eine Nachricht, wenn der Benutzer nicht gefunden wird.
      */
+    @Transactional
     public String findBenutzer(String benutzer) {
         if (!this.existsBenutzer(benutzer)) {
             return "Benutzer mit der ID " + benutzer + " wurde nicht gefunden.";
@@ -79,6 +81,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      * @param benutzer Die Benutzer-ID.
      * @return true, wenn der Benutzer existiert, ansonsten false.
      */
+    @Transactional
     public boolean existsBenutzer(String benutzer) {
         return this.repository.existsBenutzer(benutzer);
     }
@@ -89,6 +92,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      * @param benutzerId Die Benutzer-ID.
      * @return Eine Iterable von Entitäten.
      */
+    @Transactional
     public Iterable<T> findAllByBenutzerId(String benutzerId) {
         return repository.findAllByBenutzerID(benutzerId);
     }
@@ -99,6 +103,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      * @param benutzerId Die Benutzer-ID.
      * @return Eine optionale Entität.
      */
+    @Transactional
     public Optional<T> findByBenutzerId(String benutzerId) {
         if (!this.repository.existsByBenutzerID(benutzerId)) {
             throw new NotFoundException("Benutzer mit der ID " + benutzerId + " nicht gefunden.");
@@ -111,6 +116,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      *
      * @param id Die ID der zu löschenden Entität.
      */
+    @Transactional
     public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new NotFoundException("Eintrag mit der ID " + id + " wurde nicht gefunden.");
@@ -124,6 +130,7 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
      * @param kontoId Die Konto-ID.
      * @return Eine Menge von Entitäten des Kontos.
      */
+    @Transactional
     public Set<T> findAllByKontoId(Long kontoId) {
         Optional<KontoDTO> kontoDTO = this.kontoClient.findById(kontoId);
         if (kontoDTO.isPresent()) {
@@ -133,6 +140,16 @@ public abstract class BaseService<T extends AbstraktEntitaet> {
         }
     }
 
+    /**
+     * Findet eine Entität basierend auf der Konto-ID.
+     * Diese Methode sucht in der Repository nach einer Entität mit der angegebenen Konto-ID.
+     * Wenn die Entität gefunden wird, wird sie zurückgegeben. Andernfalls wird eine {@link NotFoundException} ausgelöst.
+     *
+     * @param kontoId Die ID des Kontos, nach der gesucht werden soll.
+     * @return Die gefundene Entität.
+     * @throws NotFoundException Wenn keine Entität mit der angegebenen Konto-ID gefunden wird.
+     */
+    @Transactional
     public T findByKontoId( Long kontoId){
         Optional<T> entity = this.repository.findById(kontoId);
         if (entity.isPresent()) {
